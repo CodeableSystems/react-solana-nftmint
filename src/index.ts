@@ -1,1 +1,2 @@
-export default "./hooks/useMint";
+import useMint, {MintProps} from "./hooks/useMint";
+export default useMint
