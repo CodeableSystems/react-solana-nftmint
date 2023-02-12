@@ -1,6 +1,17 @@
 # React Solana NFT Mint  
 
 Mint NFTs on Solana 
+With this package, all you need to mint NFTs is to provide your JSON file as an URL to the mint function.
+
+The props should be self-explanatory, but they are: 
+
+* loading: boolean
+* rpc: devnet/mainnet URL
+* creators: array of pubkeys (total shares must sum up to 100)
+* mintPrice: how much you take
+* priceReceiver: pubkey that receives the SOL
+* symbol: any symbol (keep it short)
+* royalty: 500 equals 5% 
 
 ## Setup
 
