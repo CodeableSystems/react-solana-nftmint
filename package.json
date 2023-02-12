@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/codeablesystems/react-use-mint"
+    "url": "https://github.com/CodeableSystems/react-solana-nftmint"
   },
   "publishConfig": {
     "access": "public"
