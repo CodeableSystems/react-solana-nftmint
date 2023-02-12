@@ -1,1 +1,1 @@
-export * from "./hooks/useMint";
+export default "./hooks/useMint";

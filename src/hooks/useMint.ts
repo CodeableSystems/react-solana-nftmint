@@ -12,7 +12,7 @@ import {
 } from "@solana/web3.js"
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import mintIdl from "../idl/nft_mint.json";
-import { IDL, NftMint } from "../idl/nft_mint";
+import { IDL, NftMint } from "../types/nft_mint";
 
 function getAnchorEnvironment(rpc: string, idl: typeof IDL, wallet: AnchorWallet, programId: PublicKey) {
   const connection = new Connection(rpc, {
@@ -109,7 +109,6 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
     };
     const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
     const mintKey: Keypair = Keypair.generate()
-    const originalCreator: PublicKey = new PublicKey("Code2raHfHLuM5RNepJwUc3ML16uAfvczm3k5FbjviNA")
     const NftTokenAccount = await getAssociatedTokenAddress(mintKey.publicKey, anchorWallet.publicKey)
     console.log("NFT Account: ", NftTokenAccount.toBase58());
     const lamports: number =
@@ -177,7 +176,6 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
           systemProgram: SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           masterEdition: masterEdition,
-          originalCreator: originalCreator,
           minter: anchorWallet.publicKey,
           receiver: props.priceReceiver,
           feeReceiver: feeReceiver,

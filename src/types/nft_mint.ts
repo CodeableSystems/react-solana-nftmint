@@ -56,11 +56,6 @@ export type NftMint = {
           "isSigner": false
         },
         {
-          "name": "originalCreator",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "minter",
           "isMut": false,
           "isSigner": false
@@ -207,11 +202,6 @@ export const IDL: NftMint = {
         },
         {
           "name": "masterEdition",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "originalCreator",
           "isMut": true,
           "isSigner": false
         },
