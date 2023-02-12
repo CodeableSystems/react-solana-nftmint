@@ -1,6 +1,6 @@
 {
   "name": "react-solana-nftmint",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "UseEffect hook to mint NFT 1/1s",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
