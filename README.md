@@ -6,7 +6,7 @@ Mint NFTs on Solana
 
 ### Installation
 
-`yarn add react-solana-mintnft` or `npm i -S react-solana-mintnft
+`yarn add react-solana-mintnft` or `npm i -S react-solana-mintnft`
 
 ### Usage
 
