@@ -43,7 +43,7 @@ export default function MyComponent() {
         ],
         mintPrice: new anchor.BN(0.05 * LAMPORTS_PER_SOL),
         symbol: "",
-        priceReceiver: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
+        seller: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
         royalty: 500,
     }
     const { mintNft, ready, error } = useMint(props, anchorWallet);
