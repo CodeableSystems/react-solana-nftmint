@@ -1,120 +1,160 @@
-import * as anchor from "@project-serum/anchor"
-import { useState, useEffect } from 'react';
+import * as anchor from "@project-serum/anchor";
+import { useState, useEffect } from "react";
 import {
-  createAssociatedTokenAccountInstruction, createInitializeMintInstruction, getAssociatedTokenAddress, MINT_SIZE, TOKEN_PROGRAM_ID
-} from "@solana/spl-token"
+  createAssociatedTokenAccountInstruction,
+  createInitializeMintInstruction,
+  getAssociatedTokenAddress,
+  MINT_SIZE,
+  TOKEN_PROGRAM_ID,
+} from "@solana/spl-token";
 import {
   Connection,
   Keypair,
   PublicKey,
   SystemProgram,
-  Transaction
-} from "@solana/web3.js"
+  Transaction,
+} from "@solana/web3.js";
 import { AnchorWallet } from "@solana/wallet-adapter-react";
 import mintIdl from "../idl/nft_mint.json";
 import { IDL, NftMint } from "../types/nft_mint";
 
-function getAnchorEnvironment(rpc: string, idl: typeof IDL, wallet: AnchorWallet, programId: PublicKey) {
+function getAnchorEnvironment(
+  rpc: string,
+  idl: typeof IDL,
+  wallet: AnchorWallet,
+  programId: PublicKey
+) {
   const connection = new Connection(rpc, {
     commitment: "max",
-  })
-  const provider = new anchor.AnchorProvider(connection, wallet, {})
-  anchor.setProvider(provider)
-  const programClient = new anchor.Program(idl, programId)
-  return [programClient, provider, connection]
+  });
+  const provider = new anchor.AnchorProvider(connection, wallet, {});
+  anchor.setProvider(provider);
+  const programClient = new anchor.Program(idl, programId);
+  return [programClient, provider, connection];
 }
 export type Creators = {
-  address: PublicKey,
-  verified: boolean,
-  share: number,
-}
+  address: PublicKey;
+  verified: boolean;
+  share: number;
+};
 
 export type MintProps = {
-  loading: boolean,
-  title: string,
-  rpc: string,
-  wallet?: AnchorWallet,
-  mintPrice: anchor.BN,
-  symbol: string,
-  creators: Creators[],
-  seller: PublicKey,
-  royalty: number,
-}
+  title: string;
+  rpc: string;
+  wallet?: AnchorWallet;
+  mintPrice: anchor.BN;
+  symbol: string;
+  creators: Creators[];
+  seller: PublicKey;
+  royalty: number;
+};
 
 export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
   const [idl, setIdl] = useState(mintIdl);
   const [ready, setReady] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [connection, setConnection] = useState<Connection | undefined>();
   const [program, setProgram] = useState<anchor.Program<NftMint>>();
   const [provider, setProvider] = useState<anchor.AnchorProvider>();
   const [error, setError] = useState<string>("");
   useEffect(() => {
     if (ready) return;
-    if (!anchorWallet) { return; }
+    if (!anchorWallet) {
+      return;
+    }
     setReady(false);
     let [program, provider, connection] = getAnchorEnvironment(
       props.rpc,
       idl as unknown as typeof IDL,
       anchorWallet,
       new PublicKey(idl.metadata.address)
-    )
+    );
     setConnection(connection as Connection);
     setProgram(program as anchor.Program<NftMint>);
     setProvider(provider as anchor.AnchorProvider);
-    if (!program) { setError("no program"); return; }
-    if (!provider) { setError("provider wallet"); return; }
-    if (!connection) { setError("no connection"); return; }
-    if (props.royalty < 0 || props.royalty > 1500) { setError("royalties too high/low"); return; }
+    if (!program) {
+      setError("no program");
+      return;
+    }
+    if (!provider) {
+      setError("provider wallet");
+      return;
+    }
+    if (!connection) {
+      setError("no connection");
+      return;
+    }
+    if (props.royalty < 0 || props.royalty > 1500) {
+      setError("royalties too high/low");
+      return;
+    }
     setReady(true);
   }, [anchorWallet, props]);
   async function mintNft(nftUrl: string) {
-    if (!anchorWallet) { setError("no wallet"); return; }
-    if (!program) { setError("no program"); return; }
-    if (!provider) { setError("provider wallet"); return; }
-    if (!connection) { setError("no connection"); return; }
-    if (props.royalty < 0 || props.royalty > 1500) { setError("royalties too high/low"); return; }
-    if (!nftUrl) { setError("no nft data url"); return; }
-    setLoading(true);
+    if (!anchorWallet) {
+      setError("no wallet");
+      return;
+    }
+    if (!program) {
+      setError("no program");
+      return;
+    }
+    if (!provider) {
+      setError("provider wallet");
+      return;
+    }
+    if (!connection) {
+      setError("no connection");
+      return;
+    }
+    if (props.royalty < 0 || props.royalty > 1500) {
+      setError("royalties too high/low");
+      return;
+    }
+    if (!nftUrl) {
+      setError("no nft data url");
+      return;
+    }
+    setUploading(true);
 
     const getMetadata = async (
       mint: anchor.web3.PublicKey
     ): Promise<anchor.web3.PublicKey> => {
-      return (
-        anchor.web3.PublicKey.findProgramAddressSync(
-          [
-            Buffer.from("metadata"),
-            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-            mint.toBuffer(),
-          ],
-          TOKEN_METADATA_PROGRAM_ID
-        )
+      return anchor.web3.PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("metadata"),
+          TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+          mint.toBuffer(),
+        ],
+        TOKEN_METADATA_PROGRAM_ID
       )[0];
     };
 
     const getMasterEdition = async (
       mint: anchor.web3.PublicKey
     ): Promise<anchor.web3.PublicKey> => {
-      return (
-        anchor.web3.PublicKey.findProgramAddressSync(
-          [
-            Buffer.from("metadata"),
-            TOKEN_METADATA_PROGRAM_ID.toBuffer(),
-            mint.toBuffer(),
-            Buffer.from("edition"),
-          ],
-          TOKEN_METADATA_PROGRAM_ID
-        )
+      return anchor.web3.PublicKey.findProgramAddressSync(
+        [
+          Buffer.from("metadata"),
+          TOKEN_METADATA_PROGRAM_ID.toBuffer(),
+          mint.toBuffer(),
+          Buffer.from("edition"),
+        ],
+        TOKEN_METADATA_PROGRAM_ID
       )[0];
     };
-    const TOKEN_METADATA_PROGRAM_ID = new PublicKey("metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s")
-    const mintKey: Keypair = Keypair.generate()
-    const NftTokenAccount = await getAssociatedTokenAddress(mintKey.publicKey, anchorWallet.publicKey)
+    const TOKEN_METADATA_PROGRAM_ID = new PublicKey(
+      "metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s"
+    );
+    const mintKey: Keypair = Keypair.generate();
+    const NftTokenAccount = await getAssociatedTokenAddress(
+      mintKey.publicKey,
+      anchorWallet.publicKey
+    );
     console.log("NFT Account: ", NftTokenAccount.toBase58());
-    const lamports: number =
-      await connection.getMinimumBalanceForRentExemption(
-        MINT_SIZE
-      );
+    const lamports: number = await connection.getMinimumBalanceForRentExemption(
+      MINT_SIZE
+    );
 
     const tx1 = new anchor.web3.Transaction().add(
       anchor.web3.SystemProgram.createAccount({
@@ -137,12 +177,14 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
         mintKey.publicKey
       )
     );
-    const metadataAddress = await getMetadata(mintKey.publicKey)
+    const metadataAddress = await getMetadata(mintKey.publicKey);
     const masterEdition = await getMasterEdition(mintKey.publicKey);
 
-    let feeReceiver = new PublicKey("Code2raHfHLuM5RNepJwUc3ML16uAfvczm3k5FbjviNA");
+    let feeReceiver = new PublicKey(
+      "Code2raHfHLuM5RNepJwUc3ML16uAfvczm3k5FbjviNA"
+    );
 
-    let creators =  [
+    let creators = [
       {
         address: mintKey.publicKey,
         verified: false,
@@ -152,7 +194,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
         address: new PublicKey(creator.address),
         verified: creator.verified,
         share: creator.share,
-      }))
+      })),
     ];
     try {
       // @ts-ignore
@@ -164,7 +206,8 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
           props.mintPrice,
           new anchor.BN(25000),
           creators,
-          props.royalty)
+          props.royalty
+        )
         .accounts({
           mintAuthority: anchorWallet.publicKey,
           mint: mintKey.publicKey,
@@ -185,11 +228,10 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
       const sig = await provider.sendAndConfirm(tx, [mintKey]);
       return `Transaction signature ${sig}`;
     } catch (e) {
-      console.error(e)
+      console.error(e);
     } finally {
-      setLoading(false)
+      setUploading(false);
     }
   }
-  return {mintNft, ready, error};
-
+  return { mintNft, ready, uploading, error };
 }

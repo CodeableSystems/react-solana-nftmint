@@ -5,7 +5,6 @@ With this package, all you need to mint NFTs is to provide your JSON file as an 
 
 The props should be self-explanatory, but they are: 
 
-* loading: boolean
 * rpc: devnet/mainnet URL
 * creators: array of pubkeys (total shares must sum up to 100)
 * mintPrice: how much you take
@@ -46,7 +45,7 @@ export default function MyComponent() {
         seller: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
         royalty: 500,
     }
-    const { mintNft, ready, error } = useMint(props, anchorWallet);
+    const { mintNft, ready, uploading, error } = useMint(props, anchorWallet);
 
     const handleMint = useCallback(async () => {
         if (!anchorWallet) {
@@ -59,6 +58,8 @@ export default function MyComponent() {
     return (
         <div>
             {error && <div>{error}</div>}
+                        {uploading && <div>NFT is cooking...</div>}
+
             <button disabled={!ready} onClick={handleMint}>Mint {props.title}</button>
         </div>
     )
