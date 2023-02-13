@@ -9,7 +9,7 @@ The props should be self-explanatory, but they are:
 * rpc: devnet/mainnet URL
 * creators: array of pubkeys (total shares must sum up to 100)
 * mintPrice: how much you take
-* priceReceiver: pubkey that receives the SOL
+* seller: pubkey that receives the SOL
 * symbol: any symbol (keep it short)
 * royalty: 500 equals 5% 
 
@@ -33,7 +33,7 @@ export default function MyComponent() {
     const props: MintProps = {
         loading: false,
         rpc: "https://api.devnet.solana.com",
-        title: "My NFT",
+        title: "Sample NFT",
         creators: [
             {
                 address: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
@@ -42,7 +42,7 @@ export default function MyComponent() {
             },
         ],
         mintPrice: new anchor.BN(0.05 * LAMPORTS_PER_SOL),
-        symbol: "MY_SYMBOL",
+        symbol: "",
         priceReceiver: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
         royalty: 500,
     }
@@ -52,7 +52,7 @@ export default function MyComponent() {
         if (!anchorWallet) {
             return
         }
-        let nftURL = "https://files.sdrive.app/1frzxgr.json";
+        let nftURL = "https://files.sdrive.app/15zg0r4.json";
         await mintNft(nftURL);
     }, [props, anchorWallet])
 

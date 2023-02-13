@@ -37,7 +37,7 @@ export type MintProps = {
   mintPrice: anchor.BN,
   symbol: string,
   creators: Creators[],
-  priceReceiver: PublicKey,
+  seller: PublicKey,
   royalty: number,
 }
 
@@ -177,7 +177,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           masterEdition: masterEdition,
           minter: anchorWallet.publicKey,
-          receiver: props.priceReceiver,
+          receiver: props.seller,
           feeReceiver: feeReceiver,
         })
         .instruction();
