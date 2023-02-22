@@ -44,7 +44,7 @@ export default function MyComponent() {
         seller: new PublicKey("6xnRdTedrerREnaveYndZPioRuK1JcQPfnyA5mQME6vT"),
         royalty: 500,
     }
-    const { mintNft, ready, uploading, error } = useMint(props, anchorWallet);
+    const { mintNft, ready, uploading, error, mintSuccess } = useMint(props, anchorWallet);
 
     const handleMint = useCallback(async () => {
         if (!anchorWallet) {
@@ -58,6 +58,7 @@ export default function MyComponent() {
         <div>
             {error && <div>{error}</div>}
             {uploading && <div>NFT is cooking...</div>}
+            {mintSuccess && <div>Minted!</div>}
             <button disabled={!ready} onClick={handleMint}>Mint {props.title}</button>
         </div>
     )

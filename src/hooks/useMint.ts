@@ -55,6 +55,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
   const [idl, setIdl] = useState(mintIdl);
   const [ready, setReady] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [mintSuccess, setSuccess] = useState(false);
   const [connection, setConnection] = useState<Connection | undefined>();
   const [program, setProgram] = useState<anchor.Program<NftMint>>();
   const [provider, setProvider] = useState<anchor.AnchorProvider>();
@@ -118,6 +119,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
       return;
     }
     setUploading(true);
+    setSuccess(false);
 
     const getMetadata = async (
       mint: anchor.web3.PublicKey
@@ -231,6 +233,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
         .instruction();
       const tx = new Transaction().add(tx1).add(tx2);
       const sig = await provider.sendAndConfirm(tx, [mintKey]);
+      setSuccess(true)
       return `Transaction signature ${sig}`;
     } catch (e) {
       console.error(e);
@@ -238,5 +241,5 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
       setUploading(false);
     }
   }
-  return { mintNft, ready, uploading, error };
+  return { mintNft, ready, uploading, error, mintSuccess };
 }
