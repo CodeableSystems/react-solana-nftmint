@@ -47,6 +47,8 @@ export type MintProps = {
   creators: Creators[];
   seller: PublicKey;
   royalty: number;
+  creatorRoyalty: number;
+  tipRoyalty: number;
 };
 
 export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
@@ -202,13 +204,13 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
         .mintNft(
           mintKey.publicKey,
           props.title,
-          props.symbol||"NFT",
+          props.symbol || "NFT",
           nftUrl,
           props.mintPrice,
           new anchor.BN(25000),
-          1500,
-          60,
-          40
+          props.royalty || 500,
+          props.creatorRoyalty || 90,
+          props.tipRoyalty || 10
         )
         .accounts({
           mintAuthority: anchorWallet.publicKey,
