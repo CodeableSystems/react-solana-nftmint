@@ -200,13 +200,15 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
       // @ts-ignore
       let tx2 = await program.methods
         .mintNft(
+          mintKey.publicKey,
           props.title,
-          props.symbol,
+          props.symbol||"NFT",
           nftUrl,
           props.mintPrice,
           new anchor.BN(25000),
-          creators,
-          props.royalty
+          1500,
+          60,
+          40
         )
         .accounts({
           mintAuthority: anchorWallet.publicKey,
@@ -219,6 +221,7 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
           systemProgram: SystemProgram.programId,
           rent: anchor.web3.SYSVAR_RENT_PUBKEY,
           masterEdition: masterEdition,
+          originalCreator: feeReceiver,
           minter: anchorWallet.publicKey,
           receiver: props.seller,
           feeReceiver: feeReceiver,
