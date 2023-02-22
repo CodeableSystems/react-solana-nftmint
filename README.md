@@ -30,7 +30,6 @@ import useMint, { MintProps } from "react-solana-nftmint";
 export default function MyComponent() {
     const anchorWallet = useAnchorWallet()
     const props: MintProps = {
-        loading: false,
         rpc: "https://api.devnet.solana.com",
         title: "Sample NFT",
         creators: [
