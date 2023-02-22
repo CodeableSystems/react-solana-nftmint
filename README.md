@@ -58,8 +58,7 @@ export default function MyComponent() {
     return (
         <div>
             {error && <div>{error}</div>}
-                        {uploading && <div>NFT is cooking...</div>}
-
+            {uploading && <div>NFT is cooking...</div>}
             <button disabled={!ready} onClick={handleMint}>Mint {props.title}</button>
         </div>
     )

@@ -56,6 +56,11 @@ export type NftMint = {
           "isSigner": false
         },
         {
+          "name": "originalCreator",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "minter",
           "isMut": false,
           "isSigner": false
@@ -72,6 +77,10 @@ export type NftMint = {
         }
       ],
       "args": [
+        {
+          "name": "creatorKey",
+          "type": "publicKey"
+        },
         {
           "name": "title",
           "type": "string"
@@ -93,40 +102,18 @@ export type NftMint = {
           "type": "u64"
         },
         {
-          "name": "creators",
-          "type": {
-            "vec": {
-              "defined": "Creators"
-            }
-          }
-        },
-        {
           "name": "royalty",
           "type": "u16"
+        },
+        {
+          "name": "minterRoyalty",
+          "type": "u8"
+        },
+        {
+          "name": "creatorRoyalty",
+          "type": "u8"
         }
       ]
-    }
-  ],
-  "types": [
-    {
-      "name": "Creators",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "address",
-            "type": "publicKey"
-          },
-          {
-            "name": "verified",
-            "type": "bool"
-          },
-          {
-            "name": "share",
-            "type": "u8"
-          }
-        ]
-      }
     }
   ],
   "errors": [
@@ -206,6 +193,11 @@ export const IDL: NftMint = {
           "isSigner": false
         },
         {
+          "name": "originalCreator",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "minter",
           "isMut": false,
           "isSigner": false
@@ -222,6 +214,10 @@ export const IDL: NftMint = {
         }
       ],
       "args": [
+        {
+          "name": "creatorKey",
+          "type": "publicKey"
+        },
         {
           "name": "title",
           "type": "string"
@@ -243,40 +239,18 @@ export const IDL: NftMint = {
           "type": "u64"
         },
         {
-          "name": "creators",
-          "type": {
-            "vec": {
-              "defined": "Creators"
-            }
-          }
-        },
-        {
           "name": "royalty",
           "type": "u16"
+        },
+        {
+          "name": "minterRoyalty",
+          "type": "u8"
+        },
+        {
+          "name": "creatorRoyalty",
+          "type": "u8"
         }
       ]
-    }
-  ],
-  "types": [
-    {
-      "name": "Creators",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "address",
-            "type": "publicKey"
-          },
-          {
-            "name": "verified",
-            "type": "bool"
-          },
-          {
-            "name": "share",
-            "type": "u8"
-          }
-        ]
-      }
     }
   ],
   "errors": [
