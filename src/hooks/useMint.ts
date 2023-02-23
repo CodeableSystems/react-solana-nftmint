@@ -155,7 +155,6 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
       mintKey.publicKey,
       anchorWallet.publicKey
     );
-    console.log("NFT Account: ", NftTokenAccount.toBase58());
     const lamports: number = await connection.getMinimumBalanceForRentExemption(
       MINT_SIZE
     );
@@ -233,8 +232,8 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
         .instruction();
       const tx = new Transaction().add(tx1).add(tx2);
       const sig = await provider.sendAndConfirm(tx, [mintKey]);
-      setSuccess(true)
-      return `Transaction signature ${sig}`;
+      setSuccess(true);
+      return { signature: sig, token_account: NftTokenAccount.toBase58() };
     } catch (e) {
       console.error(e);
     } finally {
