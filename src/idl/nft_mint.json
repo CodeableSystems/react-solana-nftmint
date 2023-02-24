@@ -112,6 +112,10 @@
         {
           "name": "creatorRoyalty",
           "type": "u8"
+        },
+        {
+          "name": "isMutable",
+          "type": "bool"
         }
       ]
     }

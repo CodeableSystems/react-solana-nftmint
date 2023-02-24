@@ -112,6 +112,10 @@ export type NftMint = {
         {
           "name": "creatorRoyalty",
           "type": "u8"
+        },
+        {
+          "name": "isMutable",
+          "type": "bool"
         }
       ]
     }
@@ -249,6 +253,10 @@ export const IDL: NftMint = {
         {
           "name": "creatorRoyalty",
           "type": "u8"
+        },
+        {
+          "name": "isMutable",
+          "type": "bool"
         }
       ]
     }
