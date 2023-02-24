@@ -49,6 +49,7 @@ export type MintProps = {
   royalty: number;
   creatorRoyalty: number;
   tipRoyalty: number;
+  isMutable: boolean;
 };
 
 export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
@@ -211,7 +212,8 @@ export default function useMint(props: MintProps, anchorWallet?: AnchorWallet) {
           new anchor.BN(25000),
           props.royalty || 500,
           props.creatorRoyalty || 90,
-          props.tipRoyalty || 10
+          props.tipRoyalty || 10,
+	  props.isMutable || false
         )
         .accounts({
           mintAuthority: anchorWallet.publicKey,
